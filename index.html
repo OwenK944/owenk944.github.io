@@ -2,39 +2,181 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Owen Klea</title>
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Owen Klea Portfolio</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
-  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="scene">
 
-    <!-- Animated Vaporwave Background -->
-    <div id="gradient-background"></div>
-
-    <!-- Synthwave Grid Canvas -->
-    <canvas id="grid-canvas"></canvas>
-
-    <!-- Floating 3D Shapes (spawned dynamically) -->
-    <div id="shapes-3d"></div>
-
-    <!-- Text Content -->
-    <div id="text-wrapper">
-      <p class="intro-tag">Hey there, I’m</p>
-      <div id="name-reveal">
-        <span class="letter from-top">O</span>
-        <span class="letter from-left">W</span>
-        <span class="letter from-right">E</span>
-        <span class="letter from-bottom">N</span>
-        <span class="spacer"></span>
-        <span class="letter from-left delay-1">K</span>
-        <span class="letter from-top delay-2">L</span>
-        <span class="letter from-right delay-3">E</span>
-        <span class="letter from-bottom delay-4">A</span>
-      </div>
-      <p id="typing"></p>
+  <!-- LOADING SCREEN -->
+  <div id="loading-screen">
+    <div class="loading-label">
+      Loading <span class="filename">OWEN_KLEA_PORTFOLIO.prproj</span>
     </div>
+    <div class="loading-bar">
+      <div class="progress"></div>
+    </div>
+  </div>
+
+  <!-- MAIN EDITOR -->
+  <div id="editor">
+
+    <!-- TOP BAR -->
+    <header id="top-bar">
+      <nav>
+        <button>File</button>
+        <button>Edit</button>
+        <button>Effects</button>
+        <button>View</button>
+        <button>Help</button>
+      </nav>
+      <button id="save-btn">Save</button>
+    </header>
+
+    <!-- TOOLS SIDEBAR -->
+    <aside id="tools-panel">
+      <div class="tool" title="Select">🖱️</div>
+      <div class="tool" title="Cut">✂️</div>
+      <div class="tool" title="Slip">⛓️</div>
+      <div class="tool" title="Pen">✏️</div>
+    </aside>
+
+    <!-- PORTFOLIO PANEL -->
+    <section id="portfolio-panel">
+      <section data-index="0">
+        <h2>Project A</h2>
+        <p>Short description…</p>
+      </section>
+      <section data-index="1">
+        <h2>Project B</h2>
+        <p>Short description…</p>
+      </section>
+      <section data-index="2">
+        <h2>Project C</h2>
+        <p>Short description…</p>
+      </section>
+    </section>
+
+    <!-- RIGHT SIDE PANELS -->
+    <div id="right-panel">
+
+      <!-- PROGRAM MONITOR -->
+      <aside id="viewport-panel">
+        <div class="monitor-placeholder">PROGRAM MONITOR</div>
+        <div id="viewport-controls">
+          <button class="btn">⏮️</button>
+          <button class="btn">⏯️</button>
+          <button class="btn">⏭️</button>
+          <button class="btn">⏹️</button>
+          <span id="timecode">00:00:00:00</span>
+        </div>
+      </aside>
+
+      <!-- COLOR & SOUND -->
+      <div id="color-sound-container">
+        <!-- Color Grading -->
+        <aside id="color-panel">
+          <h3>Color Grading</h3>
+          <div class="color-wheel"></div>
+          <div class="slider-group">
+            <label>Lift</label>
+            <input type="range" min="-1" max="1" step="0.01" value="0" />
+            <span class="value">0.00</span>
+          </div>
+          <div class="slider-group">
+            <label>Gamma</label>
+            <input type="range" min="0.1" max="4" step="0.01" value="1" />
+            <span class="value">1.00</span>
+          </div>
+          <div class="slider-group">
+            <label>Gain</label>
+            <input type="range" min="0" max="2" step="0.01" value="1" />
+            <span class="value">1.00</span>
+          </div>
+        </aside>
+        <!-- Audio Levels -->
+        <aside id="sound-panel">
+          <h3>Audio Levels</h3>
+          <div class="vu-meter"><div class="vu-fill" style="height:70%"></div></div>
+          <div class="vu-meter"><div class="vu-fill" style="height:30%"></div></div>
+          <div class="vu-meter"><div class="vu-fill" style="height:50%"></div></div>
+        </aside>
+      </div>
+
+      <!-- MEDIA GRID -->
+      <aside id="media-panel">
+        <h3>Media</h3>
+        <div class="thumb-grid">
+          <div class="thumb">
+            <img src="assets/thumb01.png" alt="thumb01" />
+            <div class="thumb-filename">clip01_longname.mp4</div>
+          </div>
+          <div class="thumb">
+            <img src="assets/thumb02.jpg" alt="thumb02" />
+            <div class="thumb-filename">clip02_anothername.mov</div>
+          </div>
+          <div class="thumb">
+            <img src="assets/thumb03.jpg" alt="thumb03" />
+            <div class="thumb-filename">clip03_effect.mp4</div>
+          </div>
+          <div class="thumb">
+            <img src="assets/thumb04.jpg" alt="thumb04" />
+            <div class="thumb-filename">audio_bgm_track.mp3</div>
+          </div>
+        </div>
+      </aside>
+
+    </div>
+
+    <!-- TIMELINE -->
+    <footer id="timeline-panel">
+      <!-- Time markers -->
+      <div class="ticks">
+        <span class="tick" style="left:0%">00:00</span>
+        <span class="tick" style="left:20%">00:05</span>
+        <span class="tick" style="left:40%">00:10</span>
+        <span class="tick" style="left:60%">00:15</span>
+        <span class="tick" style="left:80%">00:20</span>
+        <span class="tick" style="left:100%">00:25</span>
+      </div>
+
+      <!-- V2 (new video layer) -->
+      <div class="track-row">
+        <div class="track-label">V2</div>
+        <div class="track video-track">
+          <div class="clip vid-clip" style="width:100px;">overlay1.mp4</div>
+          <div class="clip vid-clip" style="width:130px;">overlay2.mp4</div>
+        </div>
+      </div>
+
+      <!-- V1 -->
+      <div class="track-row">
+        <div class="track-label">V1</div>
+        <div class="track video-track">
+          <div class="clip vid-clip" style="width:150px;">01_intro.mp4</div>
+          <div class="clip vid-clip" style="width:120px;">02_fx.mp4</div>
+          <div class="clip vid-clip" style="width:200px;">03_scene.mp4</div>
+        </div>
+      </div>
+
+      <!-- A1 -->
+      <div class="track-row">
+        <div class="track-label">A1</div>
+        <div class="track audio-track">
+          <div class="clip audio-clip" style="width:180px;">bgm.mp3</div>
+          <div class="clip audio-clip" style="width:80px;">sfx.wav</div>
+        </div>
+      </div>
+
+      <!-- A2 -->
+      <div class="track-row">
+        <div class="track-label">A2</div>
+        <div class="track fx-track">
+          <div class="clip fx-clip" style="width:100px;">fx_whoosh.wav</div>
+        </div>
+      </div>
+    </footer>
 
   </div>
 
