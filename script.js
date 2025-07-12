@@ -1,8 +1,15 @@
 document.addEventListener("DOMContentLoaded", () => {
-  // ====================
-  // TYPING ANIMATION
-  // ====================
-  const roles = ["Filmmaker.", "Game Dev.", "3D Designer.", "Creator."];
+  // ===========================
+  // ✍️ Typing Effect Setup
+  // ===========================
+  const roles = [
+    "Filmmaker.",
+    "Game Developer.",
+    "3D Designer.",
+    "AI Creative Specialist.",
+    "Video Editor.",
+    "Content Creator."
+  ];
   let i = 0, j = 0, current = "", isDeleting = false;
 
   function typeEffect() {
@@ -25,49 +32,55 @@ document.addEventListener("DOMContentLoaded", () => {
       i = (i + 1) % roles.length;
       setTimeout(typeEffect, 400);
     } else {
-      setTimeout(typeEffect, isDeleting ? 40 : 70);
+      setTimeout(typeEffect, isDeleting ? 30 : 50);
     }
   }
-  typeEffect();
+  setTimeout(typeEffect, 4500); // Wait until after name reveal
 
-  // ====================
-  // SHAPE RANDOMIZATION
-  // ====================
-  const shapes = document.querySelectorAll(".shape");
+  // ===========================
+  // 🧠 3D Hover Shape Rotation
+  // ===========================
+  const hoverShapes = document.querySelectorAll(".hover-shape");
+  document.addEventListener("mousemove", e => {
+    const x = (e.clientX / window.innerWidth - 0.5) * 30;
+    const y = (e.clientY / window.innerHeight - 0.5) * 30;
 
-  shapes.forEach(shape => {
-    resetShape(shape);
-    shape.addEventListener("animationiteration", () => {
-      resetShape(shape);
+    hoverShapes.forEach(shape => {
+      shape.style.transform = `rotateX(${-y}deg) rotateY(${x}deg)`;
     });
   });
 
-  function resetShape(shape) {
-    if (!shape) return;
-    const top = Math.random() * 100;
-    const left = Math.random() * 100;
-    const rotate = Math.random() * 360;
-    const delay = Math.random() * 10;
+  // ===========================
+  // 💎 Retrowave Shard Spawn Loop
+  // ===========================
+  const shardContainer = document.getElementById("shard-container");
 
-    shape.style.top = `${top}%`;
-    shape.style.left = `${left}%`;
-    shape.style.animationDelay = `${delay}s`;
-    shape.style.transform = `rotate(${rotate}deg)`;
+  function spawnShard() {
+    const shard = document.createElement("div");
+    shard.classList.add("shard");
+
+    const size = 40 + Math.random() * 60;
+    shard.style.width = `${size}px`;
+    shard.style.height = `${size}px`;
+
+    const top = Math.random() * 100;
+    shard.style.top = `${top}%`;
+    shard.style.left = `-100px`;
+
+    const duration = 10 + Math.random() * 10;
+    shard.style.animationDuration = `${duration}s`;
+
+    shardContainer.appendChild(shard);
+
+    // Remove after animation ends
+    setTimeout(() => {
+      shard.remove();
+    }, duration * 1000 + 500);
   }
 
-  // ====================
-  // MOUSE PARALLAX EFFECT
-  // ====================
-  document.addEventListener("mousemove", e => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 20;
-    const y = (e.clientY / window.innerHeight - 0.5) * 20;
+  // Spawn a shard every ~600ms
+  setInterval(spawnShard, 600);
 
-    const grid = document.querySelector("#background-grid");
-    if (grid) grid.style.transform = `translate(${x}px, ${y}px)`;
-
-    shapes.forEach(shape => {
-      const speed = shape.dataset.speed === "fast" ? 1.5 : shape.dataset.speed === "slow" ? 0.5 : 1;
-      shape.style.transform += ` translate(${x * speed}px, ${y * speed}px)`;
-    });
-  });
+  // Optional: spawn a few instantly at load
+  for (let k = 0; k < 5; k++) spawnShard();
 });

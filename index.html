@@ -8,33 +8,46 @@
 </head>
 <body>
   <div id="scene-wrapper">
-    <!-- BACKGROUND LAYERS -->
-    <div id="background-grid"></div>
-    <canvas id="trail-canvas"></canvas>
 
-    <!-- MOVING SHAPES -->
-    <div class="shape cube" data-speed="fast"></div>
-    <div class="shape pyramid" data-speed="medium"></div>
-    <div class="shape shard" data-speed="slow"></div>
-    <div class="shape sphere" data-speed="fast"></div>
-
-    <!-- NAME ASSEMBLY -->
-    <div id="name-assembly">
-      <div class="name-piece letter-o">O</div>
-      <div class="name-piece letter-w">W</div>
-      <div class="name-piece letter-e">E</div>
-      <div class="name-piece letter-n">N</div>
-
-      <div class="name-piece letter-k">K</div>
-      <div class="name-piece letter-l">L</div>
-      <div class="name-piece letter-e2">E</div>
-      <div class="name-piece letter-a">A</div>
+    <!-- LAYER: Synth Grid Background -->
+    <div id="background">
+      <canvas id="dynamic-grid"></canvas>
+      <div id="gradient-overlay"></div>
     </div>
 
-    <!-- TITLE TEXT -->
-    <div id="title-text">
+    <!-- LAYER: Floating Retrowave Shards -->
+    <div id="shard-container">
+      <div class="shard" data-type="triangle"></div>
+      <div class="shard" data-type="cube"></div>
+      <div class="shard" data-type="prism"></div>
+      <div class="shard" data-type="ring"></div>
+    </div>
+
+    <!-- LAYER: Main Intro Text -->
+    <div id="intro-text">
+      <p class="intro-line">Hey there, I'm</p>
+
+      <div id="name-build">
+        <span class="letter from-top">O</span>
+        <span class="letter from-left">W</span>
+        <span class="letter from-bottom">E</span>
+        <span class="letter from-right">N</span>
+        <span class="spacer"></span>
+        <span class="letter from-left delay-1">K</span>
+        <span class="letter from-bottom delay-2">L</span>
+        <span class="letter from-right delay-3">E</span>
+        <span class="letter from-top delay-4">A</span>
+      </div>
+
       <p id="typing"></p>
     </div>
+
+    <!-- LAYER: Interactive 3D Shapes (stay + rotate) -->
+    <div id="hover-shapes">
+      <div class="hover-shape cube"></div>
+      <div class="hover-shape ring"></div>
+    </div>
+
   </div>
 
   <script src="script.js"></script>
