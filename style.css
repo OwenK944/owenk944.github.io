@@ -4,40 +4,95 @@
   box-sizing: border-box;
 }
 
-body {
-  background: #0d0d0d;
-  color: #ffffff;
+body, html {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
-  display: flex;
-  justify-content: center;
-  align-items: center;
+  background-color: #0d0d0d;
+  color: white;
+}
+
+#intro {
+  position: relative;
+  width: 100%;
   height: 100vh;
   overflow: hidden;
-  flex-direction: column;
 }
 
-.hero h1 {
-  font-size: 3rem;
-  margin-bottom: 0.5em;
+.center-text {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  text-align: center;
+  z-index: 10;
 }
 
-.hero p {
-  font-size: 1.5rem;
+.center-text h1 {
+  font-size: 3.5rem;
+  margin-bottom: 1rem;
+}
+
+.center-text p {
+  font-size: 1.3rem;
   color: #aaa;
 }
 
-/* Animation */
-.fade-in {
-  opacity: 0;
-  transform: translateY(20px);
-  animation: fadeInUp 1s ease forwards;
+.glow-grid {
+  position: absolute;
+  width: 200%;
+  height: 200%;
+  background: url('assets/grid.svg');
+  background-size: cover;
+  animation: gridMove 30s linear infinite;
+  opacity: 0.1;
 }
 
-.delay {
-  animation-delay: 0.5s;
+@keyframes gridMove {
+  0% { transform: translate(0, 0); }
+  100% { transform: translate(-20%, -20%); }
+}
+
+.floating-objects .orb {
+  position: absolute;
+  width: 100px;
+  height: 100px;
+  background: radial-gradient(circle, #0ff, transparent);
+  border-radius: 50%;
+  top: 20%;
+  left: 30%;
+  animation: floatOrb 10s ease-in-out infinite;
+  opacity: 0.7;
+}
+
+.floating-objects .orb.small {
+  width: 60px;
+  height: 60px;
+  top: 60%;
+  left: 70%;
+  animation-delay: 3s;
+}
+
+@keyframes floatOrb {
+  0%, 100% { transform: translateY(0) scale(1); }
+  50% { transform: translateY(-20px) scale(1.1); }
+}
+
+.fade-in {
+  opacity: 0;
+  animation: fadeInUp 1.2s ease-out forwards;
+}
+
+.fade-in.delay {
+  animation-delay: 1s;
 }
 
 @keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
   to {
     opacity: 1;
     transform: translateY(0);
