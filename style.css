@@ -1,104 +1,149 @@
+/* GLOBAL RESET */
 * {
   margin: 0;
   padding: 0;
   box-sizing: border-box;
 }
 
-body, html {
+html, body {
   width: 100%;
   height: 100%;
   overflow: hidden;
   font-family: 'Segoe UI', sans-serif;
-  background-color: #0d0d0d;
+  background: #0a0a0a;
   color: white;
 }
 
-#intro {
+/* MAIN WRAPPER */
+#scene-wrapper {
   position: relative;
-  width: 100%;
+  width: 100vw;
   height: 100vh;
   overflow: hidden;
+  perspective: 1200px;
 }
 
-.center-text {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  text-align: center;
-  z-index: 10;
-}
-
-.center-text h1 {
-  font-size: 4rem;
-  margin-bottom: 1rem;
-  color: #0ff;
-  text-shadow: 0 0 10px #0ff;
-}
-
-.center-text p {
-  font-size: 1.5rem;
-  color: #ffffffcc;
-}
-
-.glow-grid {
+/* BACKGROUND GRID */
+#background-grid {
   position: absolute;
   width: 300%;
   height: 300%;
-  background: url('assets/grid.svg');
-  background-size: cover;
-  animation: gridMove 40s linear infinite;
-  opacity: 0.3;
-  z-index: 1;
+  background: url('assets/grid.svg') repeat;
+  background-size: 60px 60px;
+  opacity: 0.2;
+  animation: gridDrift 40s linear infinite;
+  z-index: 0;
 }
 
-@keyframes gridMove {
+@keyframes gridDrift {
   0% { transform: translate(0, 0); }
-  100% { transform: translate(-20%, -20%); }
+  100% { transform: translate(-25%, -25%); }
 }
 
-.floating-objects .orb {
+/* TRAIL CANVAS */
+#trail-canvas {
   position: absolute;
-  width: 140px;
-  height: 140px;
-  background: radial-gradient(circle, rgba(0,255,255,0.6), transparent 70%);
-  border-radius: 50%;
-  top: 25%;
-  left: 25%;
-  animation: floatOrb 10s ease-in-out infinite alternate;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: 1;
+  pointer-events: none;
+}
+
+/* SHAPES */
+.shape {
+  position: absolute;
+  width: 80px;
+  height: 80px;
+  opacity: 0.7;
   z-index: 2;
+  animation: zoomFly 10s linear infinite;
+  will-change: transform;
 }
 
-.floating-objects .orb.small {
-  width: 90px;
-  height: 90px;
-  top: 60%;
-  left: 70%;
-  animation-delay: 3s;
+.shape.cube {
+  background: linear-gradient(45deg, #0ff, #08f);
+  transform: rotateX(45deg) rotateY(45deg);
 }
 
-@keyframes floatOrb {
-  0% { transform: translateY(0) scale(1); }
-  50% { transform: translateY(-20px) scale(1.1); }
-  100% { transform: translateY(0) scale(1); }
+.shape.pyramid {
+  background: radial-gradient(circle at center, #f0f, #80f);
+  clip-path: polygon(50% 0%, 100% 100%, 0% 100%);
 }
 
-.fade-in {
-  opacity: 0;
-  animation: fadeInUp 1.5s ease-out forwards;
+.shape.shard {
+  background: linear-gradient(60deg, #ff0, #f80);
+  clip-path: polygon(20% 0%, 100% 10%, 80% 100%, 0% 90%);
 }
 
-.fade-in.delay {
-  animation-delay: 1s;
+.shape.sphere {
+  background: radial-gradient(circle, #0ff, transparent);
+  border-radius: 50%;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+@keyframes zoomFly {
+  0% {
+    transform: translate3d(-100vw, 0, 0) scale(0.4) rotate(0deg);
+    opacity: 0.2;
   }
+  50% {
+    opacity: 1;
+  }
+  100% {
+    transform: translate3d(120vw, -50vh, 0) scale(1.2) rotate(720deg);
+    opacity: 0;
+  }
+}
+
+/* NAME ASSEMBLY */
+#name-assembly {
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  gap: 0.5rem;
+  z-index: 5;
+}
+
+.name-piece {
+  font-size: 4rem;
+  font-weight: bold;
+  color: #0ff;
+  text-shadow: 0 0 15px #0ff;
+  opacity: 0;
+  transform: scale(3) translateY(200px);
+  animation: buildIn 0.8s ease-out forwards;
+}
+
+.letter-o { animation-delay: 0.1s; }
+.letter-w { animation-delay: 0.2s; }
+.letter-e { animation-delay: 0.3s; }
+.letter-n { animation-delay: 0.4s; }
+.letter-k { animation-delay: 0.5s; }
+.letter-l { animation-delay: 0.6s; }
+.letter-e2 { animation-delay: 0.7s; }
+.letter-a { animation-delay: 0.8s; }
+
+@keyframes buildIn {
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: scale(1) translateY(0);
   }
+}
+
+/* TYPING TEXT */
+#title-text {
+  position: absolute;
+  bottom: 8%;
+  width: 100%;
+  text-align: center;
+  z-index: 6;
+}
+
+#title-text p {
+  font-size: 1.3rem;
+  color: #ffffffcc;
+  letter-spacing: 1px;
 }

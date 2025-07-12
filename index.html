@@ -2,22 +2,38 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Owen Klea</title>
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
-  <div id="intro">
-    <div class="glow-grid"></div>
+  <div id="scene-wrapper">
+    <!-- BACKGROUND LAYERS -->
+    <div id="background-grid"></div>
+    <canvas id="trail-canvas"></canvas>
 
-    <div class="floating-objects">
-      <div class="orb"></div>
-      <div class="orb small"></div>
+    <!-- MOVING SHAPES -->
+    <div class="shape cube" data-speed="fast"></div>
+    <div class="shape pyramid" data-speed="medium"></div>
+    <div class="shape shard" data-speed="slow"></div>
+    <div class="shape sphere" data-speed="fast"></div>
+
+    <!-- NAME ASSEMBLY -->
+    <div id="name-assembly">
+      <div class="name-piece letter-o">O</div>
+      <div class="name-piece letter-w">W</div>
+      <div class="name-piece letter-e">E</div>
+      <div class="name-piece letter-n">N</div>
+
+      <div class="name-piece letter-k">K</div>
+      <div class="name-piece letter-l">L</div>
+      <div class="name-piece letter-e2">E</div>
+      <div class="name-piece letter-a">A</div>
     </div>
 
-    <div class="center-text">
-      <h1 class="fade-in">Owen Klea</h1>
-      <p id="typing" class="fade-in delay"></p>
+    <!-- TITLE TEXT -->
+    <div id="title-text">
+      <p id="typing"></p>
     </div>
   </div>
 
