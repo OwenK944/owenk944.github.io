@@ -30,23 +30,26 @@ body, html {
 }
 
 .center-text h1 {
-  font-size: 3.5rem;
+  font-size: 4rem;
   margin-bottom: 1rem;
+  color: #0ff;
+  text-shadow: 0 0 10px #0ff;
 }
 
 .center-text p {
-  font-size: 1.3rem;
-  color: #aaa;
+  font-size: 1.5rem;
+  color: #ffffffcc;
 }
 
 .glow-grid {
   position: absolute;
-  width: 200%;
-  height: 200%;
+  width: 300%;
+  height: 300%;
   background: url('assets/grid.svg');
   background-size: cover;
-  animation: gridMove 30s linear infinite;
-  opacity: 0.1;
+  animation: gridMove 40s linear infinite;
+  opacity: 0.3;
+  z-index: 1;
 }
 
 @keyframes gridMove {
@@ -56,32 +59,33 @@ body, html {
 
 .floating-objects .orb {
   position: absolute;
-  width: 100px;
-  height: 100px;
-  background: radial-gradient(circle, #0ff, transparent);
+  width: 140px;
+  height: 140px;
+  background: radial-gradient(circle, rgba(0,255,255,0.6), transparent 70%);
   border-radius: 50%;
-  top: 20%;
-  left: 30%;
-  animation: floatOrb 10s ease-in-out infinite;
-  opacity: 0.7;
+  top: 25%;
+  left: 25%;
+  animation: floatOrb 10s ease-in-out infinite alternate;
+  z-index: 2;
 }
 
 .floating-objects .orb.small {
-  width: 60px;
-  height: 60px;
+  width: 90px;
+  height: 90px;
   top: 60%;
   left: 70%;
   animation-delay: 3s;
 }
 
 @keyframes floatOrb {
-  0%, 100% { transform: translateY(0) scale(1); }
+  0% { transform: translateY(0) scale(1); }
   50% { transform: translateY(-20px) scale(1.1); }
+  100% { transform: translateY(0) scale(1); }
 }
 
 .fade-in {
   opacity: 0;
-  animation: fadeInUp 1.2s ease-out forwards;
+  animation: fadeInUp 1.5s ease-out forwards;
 }
 
 .fade-in.delay {
@@ -91,7 +95,7 @@ body, html {
 @keyframes fadeInUp {
   from {
     opacity: 0;
-    transform: translateY(20px);
+    transform: translateY(30px);
   }
   to {
     opacity: 1;

@@ -1,4 +1,4 @@
-// Mouse movement = parallax
+// Mouse-based parallax movement
 document.addEventListener("mousemove", e => {
   const orb1 = document.querySelector(".orb");
   const orb2 = document.querySelector(".orb.small");
@@ -32,9 +32,9 @@ function typeEffect() {
   } else if (isDeleting && j === 0) {
     isDeleting = false;
     i = (i + 1) % roles.length;
-    setTimeout(typeEffect, 300);
+    setTimeout(typeEffect, 400);
   } else {
-    setTimeout(typeEffect, isDeleting ? 30 : 50);
+    setTimeout(typeEffect, isDeleting ? 40 : 70);
   }
 }
 typeEffect();
