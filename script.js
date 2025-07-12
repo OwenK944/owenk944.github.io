@@ -1,86 +1,120 @@
+// === NAME REVEAL ANIMATION ===
 document.addEventListener("DOMContentLoaded", () => {
-  // ===========================
-  // ✍️ Typing Effect Setup
-  // ===========================
-  const roles = [
-    "Filmmaker.",
-    "Game Developer.",
-    "3D Designer.",
-    "AI Creative Specialist.",
-    "Video Editor.",
-    "Content Creator."
-  ];
-  let i = 0, j = 0, current = "", isDeleting = false;
+  const name = "OWEN KLEA";
+  const nameReveal = document.getElementById("name-reveal");
 
-  function typeEffect() {
-    const typing = document.getElementById("typing");
-    if (!typing) return;
+  const directions = ["from-top", "from-left", "from-bottom", "from-right"];
 
-    if (!isDeleting && j <= roles[i].length) {
-      current = roles[i].substring(0, j++);
-    } else if (isDeleting && j >= 0) {
-      current = roles[i].substring(0, j--);
-    }
+  name.split("").forEach((char, index) => {
+    const span = document.createElement("span");
+    span.classList.add("letter");
 
-    typing.innerHTML = current;
-
-    if (!isDeleting && j === roles[i].length) {
-      isDeleting = true;
-      setTimeout(typeEffect, 1000);
-    } else if (isDeleting && j === 0) {
-      isDeleting = false;
-      i = (i + 1) % roles.length;
-      setTimeout(typeEffect, 400);
+    if (char === " ") {
+      span.classList.add("spacer");
     } else {
-      setTimeout(typeEffect, isDeleting ? 30 : 50);
+      const dir = directions[index % directions.length];
+      span.classList.add(dir);
+      span.classList.add(`delay-${Math.floor(index / 2) + 1}`);
+      span.textContent = char;
     }
-  }
-  setTimeout(typeEffect, 4500); // Wait until after name reveal
 
-  // ===========================
-  // 🧠 3D Hover Shape Rotation
-  // ===========================
-  const hoverShapes = document.querySelectorAll(".hover-shape");
-  document.addEventListener("mousemove", e => {
-    const x = (e.clientX / window.innerWidth - 0.5) * 30;
-    const y = (e.clientY / window.innerHeight - 0.5) * 30;
-
-    hoverShapes.forEach(shape => {
-      shape.style.transform = `rotateX(${-y}deg) rotateY(${x}deg)`;
-    });
+    nameReveal.appendChild(span);
   });
 
-  // ===========================
-  // 💎 Retrowave Shard Spawn Loop
-  // ===========================
-  const shardContainer = document.getElementById("shard-container");
+  // Typing animation init after letters reveal
+  setTimeout(startTyping, 6000);
+});
 
-  function spawnShard() {
-    const shard = document.createElement("div");
-    shard.classList.add("shard");
+// === TYPING EFFECT ===
+const typingText = document.getElementById("typing");
+const phrases = [
+  "Digital Creator",
+  "Cinematic Editor",
+  "Game Dev",
+  "Synthwave Aesthetic Wizard",
+  "Unreal Engine Enthusiast"
+];
 
-    const size = 40 + Math.random() * 60;
-    shard.style.width = `${size}px`;
-    shard.style.height = `${size}px`;
+let phraseIndex = 0;
+let charIndex = 0;
+let isDeleting = false;
 
-    const top = Math.random() * 100;
-    shard.style.top = `${top}%`;
-    shard.style.left = `-100px`;
+function startTyping() {
+  const currentPhrase = phrases[phraseIndex];
+  const currentText = currentPhrase.substring(0, charIndex);
+  typingText.textContent = currentText;
 
-    const duration = 10 + Math.random() * 10;
-    shard.style.animationDuration = `${duration}s`;
+  if (!isDeleting && charIndex < currentPhrase.length) {
+    charIndex++;
+    setTimeout(startTyping, 100);
+  } else if (isDeleting && charIndex > 0) {
+    charIndex--;
+    setTimeout(startTyping, 60);
+  } else {
+    isDeleting = !isDeleting;
+    if (!isDeleting) {
+      phraseIndex = (phraseIndex + 1) % phrases.length;
+    }
+    setTimeout(startTyping, 1500);
+  }
+}
 
-    shardContainer.appendChild(shard);
+// === FAKE 3D SHAPES ===
+const shapeContainer = document.getElementById("shapes-3d");
+const shapeCount = 16;
+const shapes = [];
 
-    // Remove after animation ends
-    setTimeout(() => {
-      shard.remove();
-    }, duration * 1000 + 500);
+for (let i = 0; i < shapeCount; i++) {
+  const shape = document.createElement("div");
+  shape.className = "shape";
+  shape.style.left = Math.random() * 100 + "vw";
+  shape.style.top = Math.random() * 100 + "vh";
+  shape.style.background = "radial-gradient(circle at center, #ff00cc, #3333ff)";
+  shapeContainer.appendChild(shape);
+  shapes.push(shape);
+}
+
+// === MOUSE-PARALLAX ROTATION ===
+document.addEventListener("mousemove", (e) => {
+  const x = (e.clientX / window.innerWidth - 0.5) * 2;
+  const y = (e.clientY / window.innerHeight - 0.5) * 2;
+
+  shapes.forEach((shape, i) => {
+    shape.style.transform = `rotateX(${y * 45}deg) rotateY(${x * 45}deg)`;
+  });
+});
+
+// === CANVAS GRID (for later upgrade) ===
+const gridCanvas = document.getElementById("grid-canvas");
+const ctx = gridCanvas.getContext("2d");
+
+function resizeCanvas() {
+  gridCanvas.width = window.innerWidth;
+  gridCanvas.height = window.innerHeight;
+}
+resizeCanvas();
+window.addEventListener("resize", resizeCanvas);
+
+function drawGrid() {
+  ctx.clearRect(0, 0, gridCanvas.width, gridCanvas.height);
+
+  const spacing = 40;
+  ctx.strokeStyle = "#00ffff22";
+  ctx.lineWidth = 1;
+
+  for (let y = 0; y < gridCanvas.height; y += spacing) {
+    ctx.beginPath();
+    ctx.moveTo(0, y);
+    ctx.lineTo(gridCanvas.width, y);
+    ctx.stroke();
+  }
+  for (let x = 0; x < gridCanvas.width; x += spacing) {
+    ctx.beginPath();
+    ctx.moveTo(x, 0);
+    ctx.lineTo(x, gridCanvas.height);
+    ctx.stroke();
   }
 
-  // Spawn a shard every ~600ms
-  setInterval(spawnShard, 600);
-
-  // Optional: spawn a few instantly at load
-  for (let k = 0; k < 5; k++) spawnShard();
-});
+  requestAnimationFrame(drawGrid);
+}
+drawGrid();

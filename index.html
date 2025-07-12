@@ -5,47 +5,35 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Owen Klea</title>
   <link rel="stylesheet" href="style.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&display=swap" rel="stylesheet">
 </head>
 <body>
-  <div id="scene-wrapper">
+  <div id="scene">
 
-    <!-- LAYER: Synth Grid Background -->
-    <div id="background">
-      <canvas id="dynamic-grid"></canvas>
-      <div id="gradient-overlay"></div>
-    </div>
+    <!-- Animated Vaporwave Background -->
+    <div id="gradient-background"></div>
 
-    <!-- LAYER: Floating Retrowave Shards -->
-    <div id="shard-container">
-      <div class="shard" data-type="triangle"></div>
-      <div class="shard" data-type="cube"></div>
-      <div class="shard" data-type="prism"></div>
-      <div class="shard" data-type="ring"></div>
-    </div>
+    <!-- Synthwave Grid Canvas -->
+    <canvas id="grid-canvas"></canvas>
 
-    <!-- LAYER: Main Intro Text -->
-    <div id="intro-text">
-      <p class="intro-line">Hey there, I'm</p>
+    <!-- Floating 3D Shapes (spawned dynamically) -->
+    <div id="shapes-3d"></div>
 
-      <div id="name-build">
+    <!-- Text Content -->
+    <div id="text-wrapper">
+      <p class="intro-tag">Hey there, I’m</p>
+      <div id="name-reveal">
         <span class="letter from-top">O</span>
         <span class="letter from-left">W</span>
-        <span class="letter from-bottom">E</span>
-        <span class="letter from-right">N</span>
+        <span class="letter from-right">E</span>
+        <span class="letter from-bottom">N</span>
         <span class="spacer"></span>
         <span class="letter from-left delay-1">K</span>
-        <span class="letter from-bottom delay-2">L</span>
+        <span class="letter from-top delay-2">L</span>
         <span class="letter from-right delay-3">E</span>
-        <span class="letter from-top delay-4">A</span>
+        <span class="letter from-bottom delay-4">A</span>
       </div>
-
       <p id="typing"></p>
-    </div>
-
-    <!-- LAYER: Interactive 3D Shapes (stay + rotate) -->
-    <div id="hover-shapes">
-      <div class="hover-shape cube"></div>
-      <div class="hover-shape ring"></div>
     </div>
 
   </div>
