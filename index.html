@@ -17,6 +17,7 @@
     <div class="loading-bar">
       <div class="progress"></div>
     </div>
+    <div id="loading-message">Initializing...</div>
   </div>
 
   <!-- MAIN EDITOR -->
@@ -43,20 +44,8 @@
     </aside>
 
     <!-- PORTFOLIO PANEL -->
-    <section id="portfolio-panel">
-      <section data-index="0">
-        <h2>Project A</h2>
-        <p>Short description…</p>
-      </section>
-      <section data-index="1">
-        <h2>Project B</h2>
-        <p>Short description…</p>
-      </section>
-      <section data-index="2">
-        <h2>Project C</h2>
-        <p>Short description…</p>
-      </section>
-    </section>
+    <!-- PORTFOLIO PANEL (populated by script.js) -->
+    <section id="portfolio-panel"></section>
 
     <!-- RIGHT SIDE PANELS -->
     <div id="right-panel">
@@ -97,10 +86,25 @@
         </aside>
         <!-- Audio Levels -->
         <aside id="sound-panel">
-          <h3>Audio Levels</h3>
-          <div class="vu-meter"><div class="vu-fill" style="height:70%"></div></div>
-          <div class="vu-meter"><div class="vu-fill" style="height:30%"></div></div>
-          <div class="vu-meter"><div class="vu-fill" style="height:50%"></div></div>
+          <div class="panel-header">Audio Levels</div>
+          <div class="audio-meters">
+            <!-- dB scale -->
+            <div class="meter-scale">
+              <div class="scale-label" style="top:0%">0</div>
+              <div class="scale-label" style="top:20%">─6</div>
+              <div class="scale-label" style="top:40%">─12</div>
+              <div class="scale-label" style="top:60%">─18</div>
+              <div class="scale-label" style="top:80%">─24</div>
+              <div class="scale-label" style="top:100%">─30</div>
+            </div>
+            <!-- VU meters -->
+            <div class="meter-bars">
+              <div class="vu-meter"><div class="vu-fill"></div></div>
+              <div class="vu-meter"><div class="vu-fill"></div></div>
+            </div>
+            <!-- waveform -->
+            <canvas id="waveform-canvas"></canvas>
+          </div>
         </aside>
       </div>
 
@@ -109,7 +113,7 @@
         <h3>Media</h3>
         <div class="thumb-grid">
           <div class="thumb">
-            <img src="assets/thumb01.png" alt="thumb01" />
+            <img src="assets/thumb01.jpg" alt="thumb01" />
             <div class="thumb-filename">clip01_longname.mp4</div>
           </div>
           <div class="thumb">
@@ -140,8 +144,9 @@
         <span class="tick" style="left:80%">00:20</span>
         <span class="tick" style="left:100%">00:25</span>
       </div>
-
-      <!-- V2 (new video layer) -->
+      <!-- Playhead -->
+      <div id="playhead"></div>
+      <!-- V2 -->
       <div class="track-row">
         <div class="track-label">V2</div>
         <div class="track video-track">
@@ -149,7 +154,6 @@
           <div class="clip vid-clip" style="width:130px;">overlay2.mp4</div>
         </div>
       </div>
-
       <!-- V1 -->
       <div class="track-row">
         <div class="track-label">V1</div>
@@ -159,7 +163,6 @@
           <div class="clip vid-clip" style="width:200px;">03_scene.mp4</div>
         </div>
       </div>
-
       <!-- A1 -->
       <div class="track-row">
         <div class="track-label">A1</div>
@@ -168,7 +171,6 @@
           <div class="clip audio-clip" style="width:80px;">sfx.wav</div>
         </div>
       </div>
-
       <!-- A2 -->
       <div class="track-row">
         <div class="track-label">A2</div>
@@ -180,6 +182,6 @@
 
   </div>
 
-  <script src="script.js"></script>
+    <script type="module" src="script.js"></script>
 </body>
 </html>

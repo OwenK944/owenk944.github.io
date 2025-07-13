@@ -14,6 +14,21 @@ html, body {
   font-family:'Poppins',sans-serif;
 }
 
+/* Loading messages */
+#loading-message {
+  font-size: 0.85rem;
+  margin-top: 8px;
+  color: var(--fg);
+  opacity: 0.7;
+  font-style: italic;
+}
+
+/* Fade-out transition */
+#loading-screen.fade-out {
+  opacity: 0;
+  transition: opacity 0.5s ease;
+}
+
 /* Loading */
 #loading-screen {
   position:fixed; inset:0;
@@ -34,17 +49,21 @@ html, body {
 }
 @keyframes pulse {
   0%,100% { opacity:1; }
-  50%     { opacity:0.6; }
+  75%     { opacity:0.6; }
 }
 .loading-bar {
   width:70%; height:20px;
   background:var(--panel); border-radius:10px;
   overflow:hidden; margin-bottom:12px;
 }
+/* in style.css */
+
 .progress {
-  width:0; height:100%;
-  background:linear-gradient(90deg,var(--primary),var(--tertiary));
-  animation:loadRandom 5s forwards;
+  width: 0;
+  height: 100%;
+  background: linear-gradient(90deg, var(--primary), var(--tertiary));
+  /* add this: */
+  transition: width 0.25s ease-out;
 }
 @keyframes loadRandom {
   0%   { width: 0%; }
@@ -100,9 +119,12 @@ html, body {
 
 /* Portfolio */
 #portfolio-panel {
-  grid-area:portfolio;
-  background:var(--panel); padding:20px; overflow-y:auto;
+  grid-area: portfolio;
+  padding: 20px;
+  overflow-y: auto;   /* enable vertical scroll */
+  min-height: 0;      /* allow it to shrink inside the grid */
 }
+
 #portfolio-panel section {
   margin-bottom:60px; opacity:0; transform:translateY(20px);
   animation:fadeInUp .6s ease-out forwards;
@@ -152,9 +174,12 @@ html, body {
 
 /* Color & Sound */
 #color-sound-container {
-  grid-area:color-sound;
-  display:grid; grid-template-columns:1fr 1fr; gap:10px;
+  grid-area: color-sound;
+  display: grid;
+  grid-template-columns: 3fr 1fr;
+  gap: 12px;
 }
+
 #color-panel, #sound-panel {
   background:var(--panel); padding:12px; border-radius:8px;
   border:1px solid var(--border);
@@ -162,6 +187,24 @@ html, body {
 #color-panel h3, #sound-panel h3 {
   font-size:0.9rem; margin-bottom:8px;
 }
+
+#sound-panel {
+  background: var(--panel);
+  border: 1px solid var(--border);
+  border-radius: 6px;
+  padding: 8px;
+  display: flex;
+  flex-direction: column;
+  height: 100%;             /* ensure it fills its parent */
+  box-sizing: border-box;
+}
+
+#sound-panel .panel-header {
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
 .color-wheel {
   width:80px; height:80px; margin:0 auto 8px;
   background: conic-gradient(red,yellow,lime,aqua,blue,magenta,red);
@@ -177,12 +220,89 @@ html, body {
 .slider-group .value { width:40px; text-align:right; font-size:0.8rem; }
 
 /* Audio Meters */
+
+.audio-meters {
+  display: flex;
+  flex: 1;                  /* fill remaining height */
+  gap: 12px;
+  height: 100%;
+}
+
 .vu-meter {
-  width:100%; height:6px; background:rgba(255,255,255,0.1);
-  border-radius:3px; margin-bottom:6px; overflow:hidden;
+  flex: 1;
+  max-width: 16px;
+  background: #222;
+  border-radius: 3px;
+  position: relative;
+  overflow: hidden;
+  height: 100%;
+}
+
+.vu-fill {
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+  height: 0;  /* starts empty */
+  background: linear-gradient(
+    to top,
+    #00ff00 0%,
+    #ffff00 60%,
+    #ff0000 100%
+  );
+  transition: height 0.2s ease-out;
+}
+
+/*—— Audio Meters + Scale + Waveform ———————————*/
+.meter-scale {
+  position: relative;
+  width: 32px;
+  height: 100%;
+}
+.scale-label {
+  position: absolute;
+  left: 0;
+  transform: translateY(-50%);
+  font-size: 0.6rem;
+  color: var(--fg);
+}
+
+/* VU METERS */
+.meter-bars {
+  display: flex;
+  flex: 1;
+  align-items: flex-end;
+  gap: 8px;
+}
+.vu-meter {
+  flex: 1;
+  max-width: 16px;
+  background: #222;
+  border-radius: 3px;
+  overflow: hidden;
+  position: relative;
+  height: 100%;
 }
 .vu-fill {
-  height:100%; background:linear-gradient(90deg,var(--secondary),var(--primary));
+  position: absolute;
+  bottom: 0; left: 0;
+  width: 100%;
+  height: 0;
+  background: linear-gradient(
+    to top,
+    #00ff00 0%,
+    #ffff00 60%,
+    #ff0000 100%
+  );
+  transition: height 0.3s ease-out;
+}
+
+/* Waveform on the right */
+#waveform-canvas {
+  flex: 2;
+  height: 100%;
+  border-left: 2px solid var(--border);
+  background: 
+    linear-gradient(rgba(255,255,255,0.05) 1px, transparent 1px) 0 0 / 4px 4px;
 }
 
 /* Media Grid */
@@ -235,6 +355,21 @@ html, body {
   overflow: visible;
   min-height: clamp(180px, 25vh, 300px);
   height: auto;
+}
+
+#timeline-panel {
+  position: relative; /* for absolutely-positioned children */
+}
+
+#playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 3px;
+  background: var(--secondary);
+  z-index: 3;
+  pointer-events: none;
+  transition: left 0.1s ease-out;
 }
 
 /* 3) Track rows: tighten margins so all 3 fit neatly */
@@ -400,3 +535,17 @@ html, body {
   min-height: 0;
   overflow-y: auto;    /* scroll internally if content still overflows */
 }
+
+/* Playhead marker */
+#playhead {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;                      /* starts at the very left */
+  width: 4px;                   /* make it nice and visible */
+  background: var(--secondary); /* your orange */
+  z-index: 10;                  /* sit on top of everything */
+  transition: left 0.1s ease;   /* smooth scrubbing */
+  pointer-events: none;
+}
+
