@@ -1,6 +1,71 @@
 // script.js
 import portfolioData from './portfolio-data.js';
 
+function renderPortfolio() {
+  const container = document.getElementById('portfolio-panel');
+  container.innerHTML = '';
+
+  portfolioData.forEach((item, idx) => {
+    const sec = document.createElement('section');
+    sec.dataset.index = idx;
+
+    if (item.type === 'intro') {
+      sec.id = 'intro-section';
+
+      // build the static “Hey there, I’m”
+      const h1small = document.createElement('h2');
+      h1small.textContent = item.heading;
+      sec.appendChild(h1small);
+
+      // build the big reactive name
+      const h1big = document.createElement('h1');
+      h1big.id = 'intro-heading';
+      [...item.bigText].forEach((char, i) => {
+        const span = document.createElement('span');
+        span.className = 'letter';
+        span.textContent = char;
+        span.style.animationDelay = `${i * 0.06}s`;
+        // start off-screen
+        const dir = i % 4;
+        if (dir === 0) span.style.transform = 'translateX(-100vw)';
+        if (dir === 1) span.style.transform = 'translateY(-100vh)';
+        if (dir === 2) span.style.transform = 'translateX(100vw)';
+        if (dir === 3) span.style.transform = 'translateY(100vh)';
+        h1big.appendChild(span);
+      });
+      sec.appendChild(h1big);
+
+      // filler paragraphs for scroll
+      for (let j = 0; j < item.fillerCount; j++) {
+        const p = document.createElement('p');
+        p.className = 'filler';
+        p.innerHTML = '&nbsp;';
+        sec.appendChild(p);
+      }
+
+    } else if (item.type === 'project') {
+      sec.classList.add('portfolio-item');
+      sec.innerHTML = `
+        <h2>${item.title}</h2>
+        <p>${item.description}</p>
+      `;
+    }
+
+    container.appendChild(sec);
+  });
+
+  // mouse-move “look at” effect for your big letters
+  document.addEventListener('mousemove', e => {
+    const cx = window.innerWidth/2;
+    const cy = window.innerHeight/2;
+    const dx = (e.clientX - cx)/cx * 10;   // ±10°
+    const dy = (e.clientY - cy)/cy * -10;
+    document.querySelectorAll('#intro-heading .letter')
+      .forEach(l => l.style.transform = `rotateY(${dx}deg) rotateX(${dy}deg)`);
+  });
+}
+
+
 // 1) Render portfolio from external data
 function renderPortfolio() {
   const container = document.getElementById('portfolio-panel');

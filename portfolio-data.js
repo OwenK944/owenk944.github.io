@@ -3,9 +3,9 @@ export default [
   // 0) Intro “slide”
   {
     type: 'intro',
-    heading: "Hey there, I'm Owen Klea",
-    description: "Welcome to my editor-styled portfolio. Scroll to explore my work and watch the timeline scrub along!",
-    fillerCount: 40
+    heading: "Hey there, I'm",
+    bigText: "Owen Klea",
+    fillerCount: 30
   },
 
   // 1) Real projects

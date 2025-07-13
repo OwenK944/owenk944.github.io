@@ -549,3 +549,38 @@ html, body {
   pointer-events: none;
 }
 
+/* —— Intro Section —— */
+#intro-section { text-align: center; padding: 80px 20px; }
+
+/* small “Hey there, I’m” */
+#intro-section > h2 {
+  font-size: 1.5rem;
+  color: var(--fg);
+  margin-bottom: 0.5em;
+}
+
+/* big 3D gradient name */
+#intro-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 4rem;
+  perspective: 800px;
+  margin: 0 0 1em;
+  line-height: 1;
+}
+.letter {
+  display: inline-block;
+  background: linear-gradient(45deg, var(--primary), var(--secondary), var(--tertiary));
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  opacity: 0;
+  animation: slideIn 1s forwards;
+}
+@keyframes slideIn {
+  to { opacity:1; transform:none; }
+}
+
+/* filler gaps */
+.filler { height: 120px; }
+
