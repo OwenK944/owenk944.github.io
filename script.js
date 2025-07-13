@@ -222,7 +222,7 @@ window.addEventListener('DOMContentLoaded', () => {
 
     if (pct < 100) {
       msgEl.textContent = messages[Math.floor(Math.random() * messages.length)];
-      setTimeout(step, Math.random() * 200 + 300);
+      setTimeout(step, Math.random() * 100 + 100);
     } else {
       msgEl.textContent = 'Complete!';
       loader.classList.add('fade-out');
