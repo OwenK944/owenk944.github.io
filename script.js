@@ -217,12 +217,12 @@ window.addEventListener('DOMContentLoaded', () => {
   let pct = 0;
 
   function step() {
-    pct = Math.min(100, pct + (Math.random() * 10 + 5));
+    pct = Math.min(100, pct + (Math.random() * 15 + 10));
     progress.style.width = pct + '%';
 
     if (pct < 100) {
       msgEl.textContent = messages[Math.floor(Math.random() * messages.length)];
-      setTimeout(step, Math.random() * 400 + 300);
+      setTimeout(step, Math.random() * 200 + 300);
     } else {
       msgEl.textContent = 'Complete!';
       loader.classList.add('fade-out');
