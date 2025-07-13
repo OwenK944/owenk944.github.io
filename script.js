@@ -40,7 +40,6 @@ const ctx    = canvas.getContext('2d');
 let width, height;
 window.addEventListener('resize', resizeWaveform);
 resizeWaveform();
-
 function resizeWaveform() {
   width  = canvas.clientWidth;
   height = canvas.clientHeight;
@@ -63,7 +62,7 @@ let transitionStart = performance.now();
 const TRANSITION_DURATION = 3000; // ms per transition
 
 function animateWave(time) {
-  // Interpolation factor [0..1]
+  // interpolation factor [0..1]
   let t = (time - transitionStart) / TRANSITION_DURATION;
   if (t >= 1) {
     currentWave = targetWave;
@@ -72,7 +71,7 @@ function animateWave(time) {
     t = 0;
   }
 
-  // Clear & draw grid
+  // clear & draw grid
   ctx.clearRect(0, 0, width, height);
   ctx.strokeStyle = 'rgba(255,255,255,0.05)';
   ctx.lineWidth = 1;
@@ -80,10 +79,10 @@ function animateWave(time) {
     ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
   }
   for (let y = 0; y < height; y += 20) {
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y);  ctx.stroke();
   }
 
-  // Draw smooth curve
+  // draw smooth curve
   ctx.strokeStyle = getComputedStyle(document.documentElement)
                      .getPropertyValue('--primary').trim();
   ctx.lineWidth = 2;
@@ -95,7 +94,7 @@ function animateWave(time) {
     pts.push({ x: i * slice, y: (1 - v) * height });
   }
 
-  // Catmull–Rom interpolation
+  // Catmull–Rom smoothing
   for (let i = 0; i < pts.length - 1; i++) {
     const p0 = pts[i === 0 ? i : i - 1];
     const p1 = pts[i];
@@ -103,18 +102,14 @@ function animateWave(time) {
     const p3 = pts[i + 2 < pts.length ? i + 2 : i + 1];
     for (let tt = 0; tt <= 1; tt += 0.1) {
       const tt2 = tt * tt, tt3 = tt2 * tt;
-      const x = 0.5 * (
-        (2 * p1.x) +
+      const x = 0.5 * ((2 * p1.x) +
         (-p0.x + p2.x) * tt +
         (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * tt2 +
-        (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * tt3
-      );
-      const y = 0.5 * (
-        (2 * p1.y) +
+        (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * tt3);
+      const y = 0.5 * ((2 * p1.y) +
         (-p0.y + p2.y) * tt +
         (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * tt2 +
-        (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * tt3
-      );
+        (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * tt3);
       if (i === 0 && tt === 0) ctx.moveTo(x, y);
       else ctx.lineTo(x, y);
     }
@@ -143,7 +138,7 @@ window.addEventListener('DOMContentLoaded', () => {
   const editor = document.getElementById('editor');
   editor.style.display = 'none';
 
-  // a) Render the portfolio
+  // a) Render portfolio
   renderPortfolio();
 
   // b) Start VU meters
