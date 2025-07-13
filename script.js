@@ -65,23 +65,6 @@ function renderPortfolio() {
   });
 }
 
-
-// 1) Render portfolio from external data
-function renderPortfolio() {
-  const container = document.getElementById('portfolio-panel');
-  container.innerHTML = '';
-  portfolioData.forEach((item, idx) => {
-    const sec = document.createElement('section');
-    sec.dataset.index = idx;
-    sec.classList.add('portfolio-item');
-    sec.innerHTML = `
-      <h2>${item.title}</h2>
-      <p>${item.description}</p>
-    `;
-    container.appendChild(sec);
-  });
-}
-
 // 2) Loading status messages
 const messages = [
   "Fetching resources…",
