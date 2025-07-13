@@ -1,3 +1,5 @@
+console.log("✅ script.js loaded");
+
 // script.js
 import portfolioData from './portfolio-data.js';
 
