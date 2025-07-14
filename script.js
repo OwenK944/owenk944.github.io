@@ -1,6 +1,7 @@
 // script.js
 import portfolioData from './portfolio-data.js';
 
+// 1) Render portfolio (intro + projects)
 function renderPortfolio() {
   const container = document.getElementById('portfolio-panel');
   container.innerHTML = '';
@@ -12,12 +13,12 @@ function renderPortfolio() {
     if (item.type === 'intro') {
       sec.id = 'intro-section';
 
-      // build the static “Hey there, I’m”
+      // small heading
       const h1small = document.createElement('h2');
       h1small.textContent = item.heading;
       sec.appendChild(h1small);
 
-      // build the big reactive name
+      // big reactive name
       const h1big = document.createElement('h1');
       h1big.id = 'intro-heading';
       [...item.bigText].forEach((char, i) => {
@@ -35,7 +36,12 @@ function renderPortfolio() {
       });
       sec.appendChild(h1big);
 
-      // filler paragraphs for scroll
+      // placeholder for the typewriter roles
+      const typer = document.createElement('div');
+      typer.id = 'typed-text';
+      sec.appendChild(typer);
+
+      // filler paragraphs
       for (let j = 0; j < item.fillerCount; j++) {
         const p = document.createElement('p');
         p.className = 'filler';
@@ -54,18 +60,52 @@ function renderPortfolio() {
     container.appendChild(sec);
   });
 
-  // mouse-move “look at” effect for your big letters
+  // mouse-tilt effect for the big letters
   document.addEventListener('mousemove', e => {
-    const cx = window.innerWidth/2;
-    const cy = window.innerHeight/2;
-    const dx = (e.clientX - cx)/cx * 10;   // ±10°
-    const dy = (e.clientY - cy)/cy * -10;
+    const cx = window.innerWidth / 2;
+    const cy = window.innerHeight / 2;
+    const dx = (e.clientX - cx) / cx * 10;   // ±10°
+    const dy = (e.clientY - cy) / cy * -10;
     document.querySelectorAll('#intro-heading .letter')
-      .forEach(l => l.style.transform = `rotateY(${dx}deg) rotateX(${dy}deg)`);
+      .forEach(l => {
+        l.style.transform = `rotateY(${dx}deg) rotateX(${dy}deg)`;
+      });
   });
 }
 
-// 2) Loading status messages
+// 2) Typewriter for roles
+function initTyping(roles) {
+  const el = document.getElementById('typed-text');
+  let roleIdx = 0, charIdx = 0, forward = true;
+
+  function tick() {
+    const current = roles[roleIdx];
+    el.textContent = current.slice(0, charIdx);
+
+    if (forward) {
+      if (charIdx < current.length) {
+        charIdx++;
+        setTimeout(tick, 100);
+      } else {
+        forward = false;
+        setTimeout(tick, 1200);
+      }
+    } else {
+      if (charIdx > 0) {
+        charIdx--;
+        setTimeout(tick, 50);
+      } else {
+        forward = true;
+        roleIdx = (roleIdx + 1) % roles.length;
+        setTimeout(tick, 300);
+      }
+    }
+  }
+
+  tick();
+}
+
+// 3) Loading status messages
 const messages = [
   "Fetching resources…",
   "Doing cool stuff…",
@@ -74,7 +114,7 @@ const messages = [
   "Working hard…"
 ];
 
-// 3) VU meter randomizer
+// 4) VU meter randomizer
 function randomizeAudioLevels() {
   document.querySelectorAll('#sound-panel .vu-fill').forEach(fill => {
     const level = Math.random() * 70 + 20; // 20%–90%
@@ -82,12 +122,13 @@ function randomizeAudioLevels() {
   });
 }
 
-// 4) Waveform setup & animation
+// 5) Waveform setup & animation
 const canvas = document.getElementById('waveform-canvas');
 const ctx    = canvas.getContext('2d');
 let width, height;
 window.addEventListener('resize', resizeWaveform);
 resizeWaveform();
+
 function resizeWaveform() {
   width  = canvas.clientWidth;
   height = canvas.clientHeight;
@@ -107,10 +148,9 @@ function genWave() {
 let currentWave = genWave();
 let targetWave  = genWave();
 let transitionStart = performance.now();
-const TRANSITION_DURATION = 3000; // ms per transition
+const TRANSITION_DURATION = 3000;
 
 function animateWave(time) {
-  // interpolation factor [0..1]
   let t = (time - transitionStart) / TRANSITION_DURATION;
   if (t >= 1) {
     currentWave = targetWave;
@@ -119,7 +159,7 @@ function animateWave(time) {
     t = 0;
   }
 
-  // clear & draw grid
+  // draw grid
   ctx.clearRect(0, 0, width, height);
   ctx.strokeStyle = 'rgba(255,255,255,0.05)';
   ctx.lineWidth = 1;
@@ -127,10 +167,10 @@ function animateWave(time) {
     ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
   }
   for (let y = 0; y < height; y += 20) {
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y);  ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
   }
 
-  // draw smooth curve
+  // draw curve
   ctx.strokeStyle = getComputedStyle(document.documentElement)
                      .getPropertyValue('--primary').trim();
   ctx.lineWidth = 2;
@@ -141,25 +181,23 @@ function animateWave(time) {
     const v = currentWave[i] + (targetWave[i] - currentWave[i]) * t;
     pts.push({ x: i * slice, y: (1 - v) * height });
   }
-
-  // Catmull–Rom smoothing
   for (let i = 0; i < pts.length - 1; i++) {
     const p0 = pts[i === 0 ? i : i - 1];
     const p1 = pts[i];
     const p2 = pts[i + 1];
     const p3 = pts[i + 2 < pts.length ? i + 2 : i + 1];
     for (let tt = 0; tt <= 1; tt += 0.1) {
-      const tt2 = tt * tt, tt3 = tt2 * tt;
-      const x = 0.5 * ((2 * p1.x) +
-        (-p0.x + p2.x) * tt +
-        (2 * p0.x - 5 * p1.x + 4 * p2.x - p3.x) * tt2 +
-        (-p0.x + 3 * p1.x - 3 * p2.x + p3.x) * tt3);
-      const y = 0.5 * ((2 * p1.y) +
-        (-p0.y + p2.y) * tt +
-        (2 * p0.y - 5 * p1.y + 4 * p2.y - p3.y) * tt2 +
-        (-p0.y + 3 * p1.y - 3 * p2.y + p3.y) * tt3);
-      if (i === 0 && tt === 0) ctx.moveTo(x, y);
-      else ctx.lineTo(x, y);
+      const tt2 = tt*tt, tt3 = tt2*tt;
+      const x = 0.5*((2*p1.x) +
+        (-p0.x+p2.x)*tt +
+        (2*p0.x-5*p1.x+4*p2.x-p3.x)*tt2 +
+        (-p0.x+3*p1.x-3*p2.x+p3.x)*tt3);
+      const y = 0.5*((2*p1.y) +
+        (-p0.y+p2.y)*tt +
+        (2*p0.y-5*p1.y+4*p2.y-p3.y)*tt2 +
+        (-p0.y+3*p1.y-3*p2.y+p3.y)*tt3);
+      if (i===0&&tt===0) ctx.moveTo(x,y);
+      else ctx.lineTo(x,y);
     }
   }
   ctx.stroke();
@@ -168,7 +206,7 @@ function animateWave(time) {
 }
 requestAnimationFrame(animateWave);
 
-// 5) Scroll-scrubbing playhead
+// 6) Scroll-scrubbing playhead
 function initScrollTimeline() {
   const port = document.getElementById('portfolio-panel');
   const ph   = document.getElementById('playhead');
@@ -180,20 +218,20 @@ function initScrollTimeline() {
   update();
 }
 
-// 6) Main loading & startup logic
+// 7) Main loading & startup logic
 window.addEventListener('DOMContentLoaded', () => {
-  // Hide editor until load finishes
+  // hide editor until load finishes
   const editor = document.getElementById('editor');
   editor.style.display = 'none';
 
-  // a) Render portfolio
+  // render everything
   renderPortfolio();
 
-  // b) Start VU meters
+  // start VU meters
   randomizeAudioLevels();
   setInterval(randomizeAudioLevels, 300);
 
-  // c) Loading screen
+  // loader
   const loader   = document.getElementById('loading-screen');
   const progress = document.querySelector('.progress');
   const msgEl    = document.getElementById('loading-message');
@@ -204,7 +242,9 @@ window.addEventListener('DOMContentLoaded', () => {
     progress.style.width = pct + '%';
 
     if (pct < 100) {
-      msgEl.textContent = messages[Math.floor(Math.random() * messages.length)];
+      msgEl.textContent = messages[
+        Math.floor(Math.random() * messages.length)
+      ];
       setTimeout(step, Math.random() * 100 + 100);
     } else {
       msgEl.textContent = 'Complete!';
@@ -213,6 +253,9 @@ window.addEventListener('DOMContentLoaded', () => {
         loader.style.display = 'none';
         editor.style.display = 'grid';
         initScrollTimeline();
+        // start typewriter AFTER editor is visible
+        const intro = portfolioData.find(it => it.type==='intro');
+        if (intro && intro.roles) initTyping(intro.roles);
       }, { once: true });
     }
   }

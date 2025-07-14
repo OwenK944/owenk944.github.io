@@ -584,3 +584,65 @@ html, body {
 /* filler gaps */
 .filler { height: 120px; }
 
+/* —— Intro Section & 3D Letters —— */
+#intro-section {
+  text-align: left;
+  padding: 80px 20px;
+}
+
+#intro-section > h2 {
+  font-size: 1.5rem;
+  color: var(--fg);
+  margin-bottom: .5em;
+  margin-left: 2rem; /* indent “Hey there, I’m” */
+}
+
+#intro-heading {
+  font-family: 'Poppins', sans-serif;
+  font-size: 6rem;        /* bigger */
+  perspective: 800px;
+  margin: .2em 0 1em 4rem; /* indent under the small heading */
+  line-height: 1;
+  display: inline-block;
+}
+
+.letter {
+  display: inline-block;
+  background: linear-gradient(45deg,
+    var(--primary) 0%,
+    var(--tertiary) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
+  opacity: 0;
+  animation: slideIn 1s forwards;
+}
+
+@keyframes slideIn {
+  to { opacity: 1; transform: none; }
+}
+
+/* on hover, each letter floats */
+.letter:hover {
+  animation: float 2s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-10px); }
+}
+
+/* type-writer text */
+#typed-text {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 1.5rem;
+  color: var(--tertiary);
+  margin-left: 4rem;
+  height: 2em; /* to avoid layout shift */
+  overflow: hidden;
+}
+
+/* filler for scroll */
+.filler { height: 120px; }
+

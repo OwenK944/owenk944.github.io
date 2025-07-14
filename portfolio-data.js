@@ -1,11 +1,11 @@
 // portfolio-data.js
 export default [
-  // 0) Intro “slide”
   {
     type: 'intro',
     heading: "Hey there, I'm",
     bigText: "Owen Klea",
-    fillerCount: 30
+    fillerCount: 30,
+    roles: ["Filmmaker","Director","Coder","Designer","Producer"]
   },
 
   // 1) Real projects
