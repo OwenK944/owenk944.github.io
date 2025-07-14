@@ -561,35 +561,6 @@ html, body {
   margin-bottom: 0.5em;
 }
 
-/* big 3D gradient name */
-/* — Intro Heading & Letters — */
-#intro-heading {
-  display: inline-block;                  /* needed for 3D and background */
-  font-family: 'Poppins', sans-serif;
-  font-size: 6rem;                        /* big letters */
-  margin-left: 4rem;                      /* tab under “Hey there, I’m” */
-  perspective: 800px;                     /* child 3D perspective */
-  background: linear-gradient(
-    45deg,
-    var(--primary) 0%,
-    var(--tertiary) 100%
-  );
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;                     /* show the gradient through the text */
-  transform-style: preserve-3d;
-}
-
-.letter {
-  display: inline-block;                  /* each letter is a 3D object */
-  opacity: 0;                             /* starts invisible for slide-in */
-  animation: slideIn 1s forwards;         /* your existing keyframe */
-  transform-style: preserve-3d;           /* preserve 3D children transforms */
-  will-change: transform, opacity;
-  /* remove any background/text-shadow here! */
-  text-shadow: none;
-}
-
 /* your slideIn keyframe stays the same */
 @keyframes slideIn {
   to {
@@ -597,16 +568,6 @@ html, body {
     transform: none;
   }
 }
-
-/* hover-float still works */
-.letter:hover {
-  animation: float 2s ease-in-out infinite;
-}
-@keyframes float {
-  0%,100% { transform: translateY(0); }
-  50%     { transform: translateY(-10px); }
-}
-
 
 /* filler gaps */
 .filler { height: 120px; }
@@ -624,28 +585,6 @@ html, body {
   margin-left: 2rem; /* indent “Hey there, I’m” */
 }
 
-#intro-heading {
-  font-family: 'Poppins', sans-serif;
-  font-size: 6rem;        /* bigger */
-  perspective: 800px;
-  margin: .2em 0 1em 4rem; /* indent under the small heading */
-  line-height: 1;
-  display: inline-block;
-}
-
-.letter {
-  display: inline-block;
-  background: linear-gradient(45deg,
-    var(--primary) 0%,
-    var(--tertiary) 100%);
-  background-clip: text;
-  -webkit-background-clip: text;
-  color: transparent;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-  opacity: 0;
-  animation: slideIn 1s forwards;
-}
-
 @keyframes slideIn {
   to { opacity: 1; transform: none; }
 }
@@ -660,45 +599,8 @@ html, body {
   50%     { transform: translateY(-10px); }
 }
 
-/* type-writer text */
-#typed-text {
-  font-family: 'Source Code Pro', monospace;
-  font-size: 3.0rem;
-  color: var(--tertiary);
-  margin-left: 10rem;
-  height: 2em; /* to avoid layout shift */
-  overflow: hidden;
-  line-height: 0.2;      /* tighten spacing */
-}
-
 /* filler for scroll */
 .filler { height: 120px; }
-
-/* —— Intro & Name Tweaks —— */
-/* make sure your two–tone retro gradient is only blue→pink */
-.letter {
-  /* ...existing stuff... */
-  background: linear-gradient(
-    45deg,
-    var(--primary) 0%,
-    var(--tertiary) 100%
-  );
-  transform-style: preserve-3d; /* enable 3D */
-}
-
-/* indent the big name under the small heading */
-#intro-heading {
-  font-size: 6rem;
-  margin-left: 4rem;
-}
-
-/* bigger, further-indented roles text */
-#typed-text {
-  font-family: 'Source Code Pro', monospace;
-  font-size: 2rem;          /* bump up size */
-  margin-left: 6rem;        /* two tabs under the name */
-  height: 2.2em;
-}
 
 #portfolio-panel {
   overflow-x: hidden;    /* prevent horizontal scroll */
@@ -708,4 +610,88 @@ html, body {
 }
 #portfolio-panel::-webkit-scrollbar {
   display: none;         /* Chrome, Safari, Opera */
+}
+
+:root {
+  --primary:    #00D7FF;
+  --tertiary:   #FF33AA;
+  --fg:         #eee;
+}
+
+/* —— Hide native scrollbars in portfolio panel —— */
+#portfolio-panel {
+  overflow-x: hidden;     /* no horizontal bar */
+  overflow-y: auto;       /* vertical scroll still works */
+  -ms-overflow-style: none;   /* IE/Edge */
+  scrollbar-width: none;      /* Firefox */
+}
+#portfolio-panel::-webkit-scrollbar {
+  display: none;          /* Chrome, Safari, Opera */
+}
+
+/* —— Intro Section & 3D Gradient Name —— */
+#intro-section {
+  text-align: left;
+  padding: 80px 20px;
+}
+
+#intro-section > h2 {
+  font-size: 1.5rem;
+  color: var(--fg);
+  margin: 0 0 0.5em 2rem;   /* indent “Hey there, I’m” */
+}
+
+#intro-heading {
+  display: inline-block;               /* contains the gradient */
+  font-family: 'Poppins', sans-serif;
+  font-size: 6rem;                     /* big letters */
+  margin: 0.2em 0 0.5em 4rem;          /* indent under the small heading */
+  perspective: 800px;                  /* for 3D tilt */
+  background: linear-gradient(
+    45deg,
+    var(--primary) 0%,
+    var(--tertiary) 100%
+  );
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;                  /* show the gradient */
+  transform-style: preserve-3d;        /* enable children 3D */
+}
+
+.letter {
+  display: inline-block;               /* each letter can animate/tilt */
+  opacity: 0;                          /* for slide-in */
+  animation: slideIn 1s forwards;      /* your entry animation */
+  transform-style: preserve-3d;        /* preserve the 3D context */
+  will-change: transform, opacity;
+}
+
+@keyframes slideIn {
+  to {
+    opacity: 1;
+    transform: none;                   /* reset the offscreen translate */
+  }
+}
+
+/* subtle hover-float */
+.letter:hover {
+  animation: float 2s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-10px); }
+}
+
+/* 3D tilt toward mouse (JS drives the rotation on each .letter) */
+
+/* —— Typewriter Roles ——
+   bigger, indented under the name */
+#typed-text {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 2.5rem;     /* adjust bigger */
+  color: var(--tertiary);
+  margin: -0.5em 0 1.5em 6rem;  /* pull up and indent */
+  height: 2.2em;         /* reserve space */
+  overflow: hidden;
+  line-height: 1.2;      /* tighter */
 }
