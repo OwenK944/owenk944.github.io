@@ -646,3 +646,29 @@ html, body {
 /* filler for scroll */
 .filler { height: 120px; }
 
+/* —— Intro & Name Tweaks —— */
+/* make sure your two–tone retro gradient is only blue→pink */
+.letter {
+  /* ...existing stuff... */
+  background: linear-gradient(
+    45deg,
+    var(--primary) 0%,
+    var(--tertiary) 100%
+  );
+  transform-style: preserve-3d; /* enable 3D */
+}
+
+/* indent the big name under the small heading */
+#intro-heading {
+  font-size: 6rem;
+  margin-left: 4rem;
+}
+
+/* bigger, further-indented roles text */
+#typed-text {
+  font-family: 'Source Code Pro', monospace;
+  font-size: 2rem;          /* bump up size */
+  margin-left: 6rem;        /* two tabs under the name */
+  height: 2.2em;
+}
+

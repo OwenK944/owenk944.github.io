@@ -21,10 +21,11 @@ function renderPortfolio() {
       // big reactive name
       const h1big = document.createElement('h1');
       h1big.id = 'intro-heading';
+      // include actual space character
       [...item.bigText].forEach((char, i) => {
         const span = document.createElement('span');
         span.className = 'letter';
-        span.textContent = char;
+        span.textContent = char === ' ' ? '\u00A0' : char;
         span.style.animationDelay = `${i * 0.06}s`;
         // start off-screen
         const dir = i % 4;
@@ -36,7 +37,7 @@ function renderPortfolio() {
       });
       sec.appendChild(h1big);
 
-      // placeholder for the typewriter roles
+      // typewriter placeholder
       const typer = document.createElement('div');
       typer.id = 'typed-text';
       sec.appendChild(typer);
@@ -60,12 +61,12 @@ function renderPortfolio() {
     container.appendChild(sec);
   });
 
-  // mouse-tilt effect for the big letters
+  // mouse-tilt effect (±5°) for the big letters
   document.addEventListener('mousemove', e => {
     const cx = window.innerWidth / 2;
     const cy = window.innerHeight / 2;
-    const dx = (e.clientX - cx) / cx * 10;   // ±10°
-    const dy = (e.clientY - cy) / cy * -10;
+    const dx = ((e.clientX - cx) / cx) * 5;   // ±5°
+    const dy = ((e.clientY - cy) / cy) * -5;
     document.querySelectorAll('#intro-heading .letter')
       .forEach(l => {
         l.style.transform = `rotateY(${dx}deg) rotateX(${dy}deg)`;
@@ -105,7 +106,7 @@ function initTyping(roles) {
   tick();
 }
 
-// 3) Loading status messages
+// 3) Loading messages
 const messages = [
   "Fetching resources…",
   "Doing cool stuff…",
@@ -114,42 +115,34 @@ const messages = [
   "Working hard…"
 ];
 
-// 4) VU meter randomizer
+// 4) VU meters
 function randomizeAudioLevels() {
   document.querySelectorAll('#sound-panel .vu-fill').forEach(fill => {
-    const level = Math.random() * 70 + 20; // 20%–90%
+    const level = Math.random() * 70 + 20;
     fill.style.height = level + '%';
   });
 }
 
-// 5) Waveform setup & animation
+// 5) Waveform
 const canvas = document.getElementById('waveform-canvas');
 const ctx    = canvas.getContext('2d');
 let width, height;
 window.addEventListener('resize', resizeWaveform);
 resizeWaveform();
-
 function resizeWaveform() {
   width  = canvas.clientWidth;
   height = canvas.clientHeight;
-  canvas.width  = width;
+  canvas.width = width;
   canvas.height = height;
 }
-
 const POINT_COUNT = 6;
 function genWave() {
-  const pts = [];
-  for (let i = 0; i <= POINT_COUNT; i++) {
-    pts.push(0.5 + (Math.random() - 0.5) * 0.4);
-  }
-  return pts;
+  return Array.from({length: POINT_COUNT+1}, () =>
+    0.5 + (Math.random()-0.5)*0.4
+  );
 }
-
-let currentWave = genWave();
-let targetWave  = genWave();
-let transitionStart = performance.now();
-const TRANSITION_DURATION = 3000;
-
+let currentWave = genWave(), targetWave = genWave();
+let transitionStart = performance.now(), TRANSITION_DURATION = 3000;
 function animateWave(time) {
   let t = (time - transitionStart) / TRANSITION_DURATION;
   if (t >= 1) {
@@ -158,107 +151,92 @@ function animateWave(time) {
     transitionStart = time;
     t = 0;
   }
-
-  // draw grid
-  ctx.clearRect(0, 0, width, height);
-  ctx.strokeStyle = 'rgba(255,255,255,0.05)';
-  ctx.lineWidth = 1;
-  for (let x = 0; x < width; x += 20) {
-    ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, height); ctx.stroke();
+  ctx.clearRect(0,0,width,height);
+  ctx.strokeStyle = 'rgba(255,255,255,0.05)'; ctx.lineWidth =1;
+  for (let x=0; x<width; x+=20) {
+    ctx.beginPath(); ctx.moveTo(x,0); ctx.lineTo(x,height); ctx.stroke();
   }
-  for (let y = 0; y < height; y += 20) {
-    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(width, y); ctx.stroke();
+  for (let y=0; y<height; y+=20) {
+    ctx.beginPath(); ctx.moveTo(0,y); ctx.lineTo(width,y); ctx.stroke();
   }
-
-  // draw curve
   ctx.strokeStyle = getComputedStyle(document.documentElement)
                      .getPropertyValue('--primary').trim();
-  ctx.lineWidth = 2;
-  ctx.beginPath();
-  const slice = width / POINT_COUNT;
-  const pts = [];
-  for (let i = 0; i <= POINT_COUNT; i++) {
-    const v = currentWave[i] + (targetWave[i] - currentWave[i]) * t;
-    pts.push({ x: i * slice, y: (1 - v) * height });
-  }
-  for (let i = 0; i < pts.length - 1; i++) {
-    const p0 = pts[i === 0 ? i : i - 1];
-    const p1 = pts[i];
-    const p2 = pts[i + 1];
-    const p3 = pts[i + 2 < pts.length ? i + 2 : i + 1];
-    for (let tt = 0; tt <= 1; tt += 0.1) {
-      const tt2 = tt*tt, tt3 = tt2*tt;
-      const x = 0.5*((2*p1.x) +
-        (-p0.x+p2.x)*tt +
-        (2*p0.x-5*p1.x+4*p2.x-p3.x)*tt2 +
+  ctx.lineWidth = 2; ctx.beginPath();
+  const slice = width/POINT_COUNT;
+  const pts = currentWave.map((v,i) => ({
+    x: i*slice,
+    y: (1 - (v + (targetWave[i]-v)*t)) * height
+  }));
+  for (let i=0; i<pts.length-1; i++) {
+    const [p0,p1,p2,p3] = [
+      pts[i===0?i:i-1], pts[i], pts[i+1], pts[i+2<pts.length?i+2:i+1]
+    ];
+    for (let tt=0; tt<=1; tt+=0.1) {
+      const tt2=tt*tt, tt3=tt2*tt;
+      const x = 0.5*((2*p1.x)+(-p0.x+p2.x)*tt+
+        (2*p0.x-5*p1.x+4*p2.x-p3.x)*tt2+
         (-p0.x+3*p1.x-3*p2.x+p3.x)*tt3);
-      const y = 0.5*((2*p1.y) +
-        (-p0.y+p2.y)*tt +
-        (2*p0.y-5*p1.y+4*p2.y-p3.y)*tt2 +
+      const y = 0.5*((2*p1.y)+(-p0.y+p2.y)*tt+
+        (2*p0.y-5*p1.y+4*p2.y-p3.y)*tt2+
         (-p0.y+3*p1.y-3*p2.y+p3.y)*tt3);
       if (i===0&&tt===0) ctx.moveTo(x,y);
       else ctx.lineTo(x,y);
     }
   }
   ctx.stroke();
-
   requestAnimationFrame(animateWave);
 }
 requestAnimationFrame(animateWave);
 
-// 6) Scroll-scrubbing playhead
+// 6) Timeline scrub
 function initScrollTimeline() {
   const port = document.getElementById('portfolio-panel');
   const ph   = document.getElementById('playhead');
   function update() {
-    const ratio = port.scrollTop / (port.scrollHeight - port.clientHeight);
-    ph.style.left = `${ratio * 100}%`;
+    const ratio = port.scrollTop/(port.scrollHeight-port.clientHeight);
+    ph.style.left = `${ratio*100}%`;
   }
   port.addEventListener('scroll', update);
   update();
 }
 
-// 7) Main loading & startup logic
-window.addEventListener('DOMContentLoaded', () => {
-  // hide editor until load finishes
+// 7) Loader + startup
+window.addEventListener('DOMContentLoaded',()=> {
   const editor = document.getElementById('editor');
   editor.style.display = 'none';
 
-  // render everything
+  // a) render all sections
   renderPortfolio();
 
-  // start VU meters
+  // b) start VU meters
   randomizeAudioLevels();
-  setInterval(randomizeAudioLevels, 300);
+  setInterval(randomizeAudioLevels,300);
 
-  // loader
+  // c) run loader
   const loader   = document.getElementById('loading-screen');
   const progress = document.querySelector('.progress');
   const msgEl    = document.getElementById('loading-message');
   let pct = 0;
-
   function step() {
-    pct = Math.min(100, pct + (Math.random() * 15 + 10));
-    progress.style.width = pct + '%';
-
-    if (pct < 100) {
+    pct = Math.min(100,pct + (Math.random()*15+10));
+    progress.style.width = pct+'%';
+    if (pct<100) {
       msgEl.textContent = messages[
-        Math.floor(Math.random() * messages.length)
+        Math.floor(Math.random()*messages.length)
       ];
-      setTimeout(step, Math.random() * 100 + 100);
+      setTimeout(step,Math.random()*100+100);
     } else {
-      msgEl.textContent = 'Complete!';
+      msgEl.textContent='Complete!';
       loader.classList.add('fade-out');
-      loader.addEventListener('transitionend', () => {
-        loader.style.display = 'none';
-        editor.style.display = 'grid';
+      loader.addEventListener('transitionend',()=>{
+        loader.style.display='none';
+        editor.style.display='grid';
         initScrollTimeline();
-        // start typewriter AFTER editor is visible
-        const intro = portfolioData.find(it => it.type==='intro');
-        if (intro && intro.roles) initTyping(intro.roles);
-      }, { once: true });
+        // start typing the roles
+        const intro = portfolioData.find(it=>it.type==='intro');
+        if(intro && intro.roles) initTyping(intro.roles);
+      },{once:true});
     }
   }
-
   step();
 });
