@@ -668,7 +668,7 @@ html, body {
   margin-left: 10rem;
   height: 2em; /* to avoid layout shift */
   overflow: hidden;
-  line-height: 1.2;      /* tighten spacing */
+  line-height: 0.2;      /* tighten spacing */
 }
 
 /* filler for scroll */
