@@ -562,26 +562,51 @@ html, body {
 }
 
 /* big 3D gradient name */
+/* — Intro Heading & Letters — */
 #intro-heading {
+  display: inline-block;                  /* needed for 3D and background */
   font-family: 'Poppins', sans-serif;
-  font-size: 4rem;
-  perspective: 800px;
-  margin: 0 0 1em;
-  line-height: 1;
-}
-.letter {
-  display: inline-block;
-  background: linear-gradient(45deg, var(--primary), var(--secondary), var(--tertiary));
+  font-size: 6rem;                        /* big letters */
+  margin-left: 4rem;                      /* tab under “Hey there, I’m” */
+  perspective: 800px;                     /* child 3D perspective */
+  background: linear-gradient(
+    45deg,
+    var(--primary) 0%,
+    var(--tertiary) 100%
+  );
   background-clip: text;
   -webkit-background-clip: text;
-  color: transparent;
-  text-shadow: 2px 2px 4px rgba(0,0,0,0.4);
-  opacity: 0;
-  animation: slideIn 1s forwards;
+  color: transparent;                     /* show the gradient through the text */
+  transform-style: preserve-3d;
 }
+
+.letter {
+  display: inline-block;                  /* each letter is a 3D object */
+  opacity: 0;                             /* starts invisible for slide-in */
+  animation: slideIn 1s forwards;         /* your existing keyframe */
+  transform-style: preserve-3d;           /* preserve 3D children transforms */
+  will-change: transform, opacity;
+  /* remove any background/text-shadow here! */
+  text-shadow: none;
+}
+
+/* your slideIn keyframe stays the same */
 @keyframes slideIn {
-  to { opacity:1; transform:none; }
+  to {
+    opacity: 1;
+    transform: none;
+  }
 }
+
+/* hover-float still works */
+.letter:hover {
+  animation: float 2s ease-in-out infinite;
+}
+@keyframes float {
+  0%,100% { transform: translateY(0); }
+  50%     { transform: translateY(-10px); }
+}
+
 
 /* filler gaps */
 .filler { height: 120px; }
